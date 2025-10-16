@@ -22,7 +22,7 @@ var (
 )
 
 const (
-	tavilySearchResultTpl = "Summary of search results:{{.answer}}\nSearch result details:\n{{range .content}}\n- {{.}}{{end}}\n"
+	tavilySearchResultTpl = "Summary of search results:\n{{.answer}}\n\nSearch result details:{{range .content}}\n- {{.}}{{end}}\n"
 )
 
 func (t searchTool) getTavilySearchMCPTool() (mcp.Tool, server.ToolHandlerFunc) {
