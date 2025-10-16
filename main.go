@@ -22,7 +22,7 @@ func main() {
 		writer.Write([]byte("ok"))
 	}))
 
-	if err := r.Run(":80"); err != nil {
+	if err := r.Run(":8080"); err != nil {
 		log.Fatalf("Server error: %v", err)
 	}
 }
