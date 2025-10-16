@@ -4,17 +4,30 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"strings"
 
+	"github.com/gin-gonic/gin"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 	"github.com/pkg/errors"
 )
 
 func main() {
+	r := gin.Default()
+	r.POST("/mcp", gin.WrapH(server.NewStreamableHTTPServer(NewMCPServer())))
+	r.GET("/test", gin.WrapF(func(writer http.ResponseWriter, request *http.Request) {
+		writer.Write([]byte("ok"))
+	}))
+
+	if err := r.Run(":8080"); err != nil {
+		log.Fatalf("Server error: %v", err)
+	}
+}
+
+func NewMCPServer() *server.MCPServer {
 	var (
 		s    = server.NewMCPServer("search_mcp", "0.0.1", server.WithToolCapabilities(false))
 		tool = mcp.NewTool("search_tool", mcp.WithDescription("search internet content"), mcp.WithString("query", mcp.Required(), mcp.Description("To search for content")))
@@ -33,11 +46,9 @@ func main() {
 
 		return mcp.NewToolResultText(ret), nil
 	}
-
 	s.AddTool(tool, searchHandler)
-	if err := server.ServeStdio(s); err != nil {
-		fmt.Printf("Server error: %v\n", err)
-	}
+
+	return s
 }
 
 func Search(query string) (string, error) {
