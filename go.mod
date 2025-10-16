@@ -3,8 +3,10 @@ module github.com/champlooein/mcp_getting_started
 go 1.24.3
 
 require (
+	github.com/gin-gonic/gin v1.11.0
 	github.com/mark3labs/mcp-go v0.41.1
 	github.com/pkg/errors v0.9.1
+	github.com/samber/lo v1.52.0
 )
 
 require (
@@ -15,7 +17,6 @@ require (
 	github.com/cloudwego/base64x v0.1.6 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
 	github.com/gin-contrib/sse v1.1.0 // indirect
-	github.com/gin-gonic/gin v1.11.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.27.0 // indirect
