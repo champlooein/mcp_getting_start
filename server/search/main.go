@@ -26,7 +26,7 @@ func main() {
 }
 
 func NewMCPServer() *server.MCPServer {
-	s := server.NewMCPServer("tiny_mcp", "0.0.1", server.WithToolCapabilities(true))
+	s := server.NewMCPServer("search_mcp", "0.0.2", server.WithToolCapabilities(true))
 	s.AddTool(defaultSearchTool.getTavilySearchMCPTool())
 
 	return s

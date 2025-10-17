@@ -27,13 +27,15 @@ const (
 	tavilySearchResultTpl = "Summary of search results:\n{{.answer}}\n\nSearch result details:{{range .content}}\n- {{.}}{{end}}\n"
 	defaultSearchTopic    = "general"
 
+	tavilySearchToolName = "tavily_search"
+
 	queryKey = "query"
 	topicKey = "topic"
 )
 
 func (t searchTool) getTavilySearchMCPTool() (mcp.Tool, server.ToolHandlerFunc) {
 	tool := mcp.NewTool(
-		"tavily_search",
+		tavilySearchToolName,
 		mcp.WithDescription("A search engine API optimized for Large Language Model (LLM) and Retrieval-Augmented Generation (RAG) applications, designed to efficiently and quickly provide real-time, accurate, and relevant web search results to enhance the information acquisition and processing capabilities of AI agents."),
 		mcp.WithString("query", mcp.Required(), mcp.Description("To search for content")),
 		mcp.WithString("topic", mcp.Description("The category of the search. Available options: general, news, finance. news is useful for retrieving real-time updates, particularly about politics, sports, and major current events covered by mainstream media sources. general is for broader, more general-purpose searches that may include a wide range of sources.")),
