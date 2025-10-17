@@ -5,8 +5,13 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/mark3labs/mcp-go/server"
 )
+
+func init() {
+	_ = godotenv.Load()
+}
 
 func main() {
 	r := gin.Default()

@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"strings"
 	"text/template"
 
@@ -55,14 +57,18 @@ func (t searchTool) getTavilySearchMCPTool() (mcp.Tool, server.ToolHandlerFunc) 
 }
 
 func (t searchTool) tavilySearch(query, topic string) (string, error) {
-	requestBody, _ := json.Marshal(map[string]interface{}{
-		"query":          query,
-		"topic":          topic,
-		"max_results":    10,
-		"include_answer": "advanced",
-	})
+	var (
+		tavilyApiKey   = os.Getenv("TAVILY_API_KEY")
+		requestBody, _ = json.Marshal(map[string]interface{}{
+			"query":          query,
+			"topic":          topic,
+			"max_results":    10,
+			"include_answer": "advanced",
+		})
+	)
+
 	req, err := http.NewRequest(http.MethodPost, `https://api.tavily.com/search`, bytes.NewReader(requestBody))
-	req.Header.Add("Authorization", "Bearer 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")
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", tavilyApiKey))
 	req.Header.Add("Content-Type", "application/json")
 
 	resp, err := http.DefaultClient.Do(req)
