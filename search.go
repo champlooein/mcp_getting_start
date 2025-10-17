@@ -23,6 +23,10 @@ var (
 
 const (
 	tavilySearchResultTpl = "Summary of search results:\n{{.answer}}\n\nSearch result details:{{range .content}}\n- {{.}}{{end}}\n"
+	defaultSearchTopic    = "general"
+
+	queryKey = "query"
+	topicKey = "topic"
 )
 
 func (t searchTool) getTavilySearchMCPTool() (mcp.Tool, server.ToolHandlerFunc) {
@@ -30,20 +34,16 @@ func (t searchTool) getTavilySearchMCPTool() (mcp.Tool, server.ToolHandlerFunc) 
 		"tavily_search",
 		mcp.WithDescription("A search engine API optimized for Large Language Model (LLM) and Retrieval-Augmented Generation (RAG) applications, designed to efficiently and quickly provide real-time, accurate, and relevant web search results to enhance the information acquisition and processing capabilities of AI agents."),
 		mcp.WithString("query", mcp.Required(), mcp.Description("To search for content")),
-		mcp.WithString("topic", mcp.Required(), mcp.Description("The category of the search.Available options: general, news, finance.news is useful for retrieving real-time updates, particularly about politics, sports, and major current events covered by mainstream media sources. general is for broader, more general-purpose searches that may include a wide range of sources.")),
+		mcp.WithString("topic", mcp.Description("The category of the search. Available options: general, news, finance. news is useful for retrieving real-time updates, particularly about politics, sports, and major current events covered by mainstream media sources. general is for broader, more general-purpose searches that may include a wide range of sources.")),
 	)
 
 	tavilySearchHandler := func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		query, err := request.RequireString("query")
-		if err != nil {
-			return mcp.NewToolResultError(err.Error()), nil
-		}
-		topic, err := request.RequireString("topic")
+		query, err := request.RequireString(queryKey)
 		if err != nil {
 			return mcp.NewToolResultError(err.Error()), nil
 		}
 
-		ret, err := t.tavilySearch(query, topic)
+		ret, err := t.tavilySearch(query, request.GetString(topicKey, defaultSearchTopic))
 		if err != nil {
 			return mcp.NewToolResultError(err.Error()), nil
 		}
