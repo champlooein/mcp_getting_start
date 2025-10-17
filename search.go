@@ -66,6 +66,9 @@ func (t searchTool) tavilySearch(query, topic string) (string, error) {
 			"include_answer": "advanced",
 		})
 	)
+	if tavilyApiKey == "" {
+		return "", errors.New("tavily api key is empty")
+	}
 
 	req, err := http.NewRequest(http.MethodPost, `https://api.tavily.com/search`, bytes.NewReader(requestBody))
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", tavilyApiKey))
